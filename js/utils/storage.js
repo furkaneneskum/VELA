@@ -3,9 +3,6 @@ import { generateId } from './format.js';
 
 const STORAGE_KEY = 'vela-data';
 
-const DEFAULT_SUBJECTS = ['Yazılım', 'Ders', 'İngilizce', 'Özel Alan'];
-const LEGACY_SUBJECTS = ['Python', 'Matematik', 'Algoritma', 'Proje', 'Genel Çalışma'];
-
 function createEmptyDay() {
   return {
     plans: [],
@@ -22,7 +19,7 @@ function createDefaultState() {
     archive: {},
     timer: {
       mode: 'stopwatch',
-      subject: 'Yazılım',
+      subject: '',
       topic: '',
       running: false,
       startedAt: null,
@@ -31,7 +28,7 @@ function createDefaultState() {
       lastTick: null,
     },
     selectedDayKey: toDateKey(),
-    subjects: [...DEFAULT_SUBJECTS],
+    subjects: [],
   };
 }
 
@@ -99,24 +96,16 @@ export function loadState() {
   if (!state.days) state.days = {};
   if (!state.archive) state.archive = {};
   if (!state.timer) state.timer = createDefaultState().timer;
-  if (!state.subjects) {
-    state.subjects = [...DEFAULT_SUBJECTS];
-  } else if (
-    state.subjects.length === LEGACY_SUBJECTS.length &&
-    state.subjects.every((s, i) => s === LEGACY_SUBJECTS[i])
-  ) {
-    state.subjects = [...DEFAULT_SUBJECTS];
+  if (!Array.isArray(state.subjects)) {
+    state.subjects = [];
   }
 
-  if (state.timer?.subject && LEGACY_SUBJECTS.includes(state.timer.subject)) {
-    const legacyMap = {
-      Python: 'Yazılım',
-      Matematik: 'Ders',
-      Algoritma: 'Yazılım',
-      Proje: 'Yazılım',
-      'Genel Çalışma': 'Özel Alan',
-    };
-    state.timer.subject = legacyMap[state.timer.subject] || 'Yazılım';
+  if (state.timer?.subject && !state.subjects.includes(state.timer.subject)) {
+    if (state.timer.subject.trim()) {
+      state.subjects.push(state.timer.subject);
+    } else {
+      state.timer.subject = '';
+    }
   }
 
   const currentWeekKey = getWeekKey();
@@ -235,4 +224,23 @@ export function getArchiveWeeks(state) {
 export function saveTimerState(state, timerData) {
   state.timer = { ...state.timer, ...timerData };
   saveState(state);
+}
+
+export function addSubject(state, name) {
+  const trimmed = name.trim();
+  if (!trimmed || trimmed.length > 24 || /[<>"']/.test(trimmed)) return false;
+  if (state.subjects.includes(trimmed)) return false;
+  state.subjects.push(trimmed);
+  saveState(state);
+  return true;
+}
+
+export function removeSubject(state, name) {
+  state.subjects = state.subjects.filter((s) => s !== name);
+  if (state.timer.subject === name) {
+    state.timer.subject = '';
+    saveTimerState(state, { subject: '' });
+  } else {
+    saveState(state);
+  }
 }

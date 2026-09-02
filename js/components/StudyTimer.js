@@ -4,30 +4,43 @@ import {
   getDayTotalMs,
   addStudySession,
   removeStudySession,
+  addSubject,
+  removeSubject,
 } from '../utils/storage.js';
 import { toDateKey } from '../utils/date.js';
 
-export function renderStudyTimer(container, { state, engine, onUpdate }) {
-  const subjects = state.subjects;
+function escapeHtml(text) {
+  const el = document.createElement('span');
+  el.textContent = text;
+  return el.innerHTML;
+}
 
+export function renderStudyTimer(container, { state, engine, onUpdate }) {
   function formatDisplay(ms) {
     return state.timer.mode === 'pomodoro' ? formatPomodoro(ms) : formatTimer(ms);
   }
 
+  const activeSubject = state.timer.subject || '';
+  const subjectLabel = activeSubject ? activeSubject.toUpperCase() : '—';
+
   container.innerHTML = `
-    <h2 class="timer-panel__title">Study Timer</h2>
-    <div class="timer-subjects" role="group" aria-label="Çalışma alanı">
-      ${subjects.map((s) => `
-        <button type="button" class="timer-subject${state.timer.subject === s ? ' is-active' : ''}" data-subject="${s}">${s}</button>
-      `).join('')}
+    <h2 class="timer-panel__title">VELA</h2>
+    <div class="timer-subjects-wrap">
+      <div class="timer-subjects" id="timer-subjects" role="group" aria-label="Çalışma alanları"></div>
+      <form class="timer-subject-add" id="subject-add-form" hidden>
+        <input type="text" id="subject-add-input" placeholder="Alan adı" maxlength="24" aria-label="Yeni alan adı" required autocomplete="off">
+        <button type="submit" class="btn btn--primary timer-subject-add__submit">Ekle</button>
+        <button type="button" class="timer-subject-add__cancel" id="subject-add-cancel" aria-label="İptal">×</button>
+      </form>
+      <button type="button" class="timer-subject timer-subject--add" id="subject-add-btn" aria-label="Alan ekle">+</button>
     </div>
     <div class="timer-modes" role="group" aria-label="Zamanlayıcı modu">
       <button type="button" class="timer-mode${state.timer.mode === 'stopwatch' ? ' is-active' : ''}" data-mode="stopwatch">Kronometre</button>
       <button type="button" class="timer-mode${state.timer.mode === 'pomodoro' ? ' is-active' : ''}" data-mode="pomodoro">Pomodoro</button>
     </div>
     <div class="timer-display">
-      <div class="timer-display__subject" id="timer-subject">${state.timer.subject.toUpperCase()}</div>
-      <input type="text" class="timer-display__topic-input" id="timer-topic-input" value="${state.timer.topic || ''}" placeholder="Konu" aria-label="Çalışma konusu">
+      <div class="timer-display__subject" id="timer-subject">${escapeHtml(subjectLabel)}</div>
+      <input type="text" class="timer-display__topic-input" id="timer-topic-input" value="${escapeHtml(state.timer.topic || '')}" placeholder="Konu" aria-label="Çalışma konusu">
       <div class="timer-display__time" id="timer-time" aria-live="polite">${formatDisplay(engine.getDisplayMs())}</div>
     </div>
     <div class="timer-controls">
@@ -41,6 +54,11 @@ export function renderStudyTimer(container, { state, engine, onUpdate }) {
     </div>
   `;
 
+  const subjectsEl = container.querySelector('#timer-subjects');
+  const addBtn = container.querySelector('#subject-add-btn');
+  const addForm = container.querySelector('#subject-add-form');
+  const addInput = container.querySelector('#subject-add-input');
+  const addCancel = container.querySelector('#subject-add-cancel');
   const startBtn = container.querySelector('#timer-start');
   const resetBtn = container.querySelector('#timer-reset');
   const saveBtn = container.querySelector('#timer-save');
@@ -49,9 +67,58 @@ export function renderStudyTimer(container, { state, engine, onUpdate }) {
   const topicInput = container.querySelector('#timer-topic-input');
   const listEl = container.querySelector('#timer-today-list');
 
+  function selectSubject(name) {
+    engine.setSubject(name);
+    subjectEl.textContent = name.toUpperCase();
+    renderSubjects();
+    updateSaveButton();
+  }
+
+  function renderSubjects() {
+    if (state.subjects.length === 0) {
+      subjectsEl.innerHTML = '';
+      return;
+    }
+
+    subjectsEl.innerHTML = state.subjects.map((s) => `
+      <span class="timer-subject-chip">
+        <button type="button" class="timer-subject${state.timer.subject === s ? ' is-active' : ''}" data-subject="${escapeHtml(s)}">${escapeHtml(s)}</button>
+        <button type="button" class="timer-subject__remove" data-remove="${escapeHtml(s)}" aria-label="${escapeHtml(s)} alanını kaldır">×</button>
+      </span>
+    `).join('');
+
+    subjectsEl.querySelectorAll('.timer-subject[data-subject]').forEach((btn) => {
+      btn.addEventListener('click', () => selectSubject(btn.dataset.subject));
+    });
+
+    subjectsEl.querySelectorAll('.timer-subject__remove').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        removeSubject(state, btn.dataset.remove);
+        if (!state.timer.subject) {
+          subjectEl.textContent = '—';
+        }
+        renderSubjects();
+      });
+    });
+  }
+
+  function openAddForm() {
+    addForm.hidden = false;
+    addBtn.hidden = true;
+    addInput.value = '';
+    addInput.focus();
+  }
+
+  function closeAddForm() {
+    addForm.hidden = true;
+    addBtn.hidden = false;
+    addInput.value = '';
+  }
+
   function updateSaveButton() {
     const duration = engine.getSessionDuration();
-    saveBtn.disabled = duration < 1000;
+    saveBtn.disabled = duration < 1000 || !state.timer.subject;
   }
 
   function renderTodaySessions() {
@@ -66,9 +133,9 @@ export function renderStudyTimer(container, { state, engine, onUpdate }) {
 
     listEl.innerHTML = sessions.map((session) => `
       <div class="timer-today__row" data-session-id="${session.id}">
-        <span class="timer-today__subject">${session.subject}${session.topic ? ` · ${session.topic}` : ''}</span>
+        <span class="timer-today__subject">${escapeHtml(session.subject)}${session.topic ? ` · ${escapeHtml(session.topic)}` : ''}</span>
         <span class="timer-today__duration">${formatDurationHuman(session.durationMs)}</span>
-        <button type="button" class="timer-today__delete" aria-label="${session.subject} kaydını sil">×</button>
+        <button type="button" class="timer-today__delete" aria-label="${escapeHtml(session.subject)} kaydını sil">×</button>
       </div>
     `).join('') + `
       <div class="timer-today__total">
@@ -80,8 +147,7 @@ export function renderStudyTimer(container, { state, engine, onUpdate }) {
     listEl.querySelectorAll('.timer-today__delete').forEach((btn) => {
       btn.addEventListener('click', () => {
         const row = btn.closest('.timer-today__row');
-        const sessionId = row.dataset.sessionId;
-        removeStudySession(state, todayKey, sessionId);
+        removeStudySession(state, todayKey, row.dataset.sessionId);
         renderTodaySessions();
         onUpdate?.();
       });
@@ -93,17 +159,23 @@ export function renderStudyTimer(container, { state, engine, onUpdate }) {
     startBtn.classList.toggle('is-running', state.timer.running);
   }
 
-  topicInput.addEventListener('input', () => {
-    engine.setTopic(topicInput.value.trim());
+  renderSubjects();
+
+  addBtn.addEventListener('click', openAddForm);
+  addCancel.addEventListener('click', closeAddForm);
+
+  addForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = addInput.value.trim();
+    if (!name) return;
+    if (addSubject(state, name)) {
+      selectSubject(name);
+    }
+    closeAddForm();
   });
 
-  container.querySelectorAll('.timer-subject').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      engine.setSubject(btn.dataset.subject);
-      subjectEl.textContent = btn.dataset.subject.toUpperCase();
-      container.querySelectorAll('.timer-subject').forEach((b) => b.classList.remove('is-active'));
-      btn.classList.add('is-active');
-    });
+  topicInput.addEventListener('input', () => {
+    engine.setTopic(topicInput.value.trim());
   });
 
   container.querySelectorAll('.timer-mode').forEach((btn) => {
@@ -136,7 +208,7 @@ export function renderStudyTimer(container, { state, engine, onUpdate }) {
 
   saveBtn.addEventListener('click', () => {
     const duration = engine.getSessionDuration();
-    if (duration < 1000) return;
+    if (duration < 1000 || !state.timer.subject) return;
 
     addStudySession(state, toDateKey(), {
       subject: state.timer.subject,
@@ -153,6 +225,7 @@ export function renderStudyTimer(container, { state, engine, onUpdate }) {
   });
 
   renderTodaySessions();
+  updateSaveButton();
 
   return {
     tick(ms) {
@@ -160,9 +233,13 @@ export function renderStudyTimer(container, { state, engine, onUpdate }) {
       updateSaveButton();
     },
     refresh() {
+      renderSubjects();
       renderTodaySessions();
       updateSaveButton();
       updateStartButton();
+      if (state.timer.subject) {
+        subjectEl.textContent = state.timer.subject.toUpperCase();
+      }
     },
     setTopic(text) {
       engine.setTopic(text);

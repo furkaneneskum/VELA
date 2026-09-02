@@ -54,6 +54,45 @@
     gap: var(--space-md);
   }
 
+  .timer-subjects-wrap {
+    flex-direction: column;
+  }
+
+  .timer-subjects {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-xs);
+    width: 100%;
+  }
+
+  .timer-subject-chip {
+    width: 100%;
+  }
+
+  .timer-subject-chip .timer-subject {
+    flex: 1;
+    min-height: 2.75rem;
+  }
+
+  .timer-subject__remove {
+    min-width: 2.75rem;
+  }
+
+  .timer-subject--add {
+    width: 100%;
+    min-height: 2.75rem;
+  }
+
+  .timer-subject-add {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .timer-subject-add input,
+  .timer-subject-add__submit {
+    min-height: 2.75rem;
+  }
+
   /* Timer — compact strip */
   .timer-panel {
     padding: var(--space-md);
@@ -64,8 +103,8 @@
   }
 
   .timer-subjects {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-wrap: wrap;
     gap: var(--space-xs);
     margin-bottom: var(--space-md);
   }
