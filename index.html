@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="VELA — haftalık plan ve çalışma ajandası">
+  <meta name="theme-color" content="#F1EBDD">
+  <title>VELA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/planner.css">
+  <link rel="stylesheet" href="css/timer.css">
+  <link rel="stylesheet" href="css/modal.css">
+  <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+  <div class="app">
+    <header class="header" id="header"></header>
+
+    <div class="workspace">
+      <aside class="timer-panel" id="timer-panel" aria-label="Çalışma zamanlayıcı"></aside>
+
+      <div class="planner-main">
+        <nav class="day-nav" id="day-nav" aria-label="Gün seçimi"></nav>
+        <section class="weekly-planner" id="weekly-planner" aria-label="Haftalık plan"></section>
+      </div>
+    </div>
+
+    <section class="weekly-summary-wrap">
+      <div class="weekly-summary" id="weekly-summary" aria-label="Haftalık özet"></div>
+    </section>
+  </div>
+
+  <dialog class="modal" id="plan-modal" aria-labelledby="modal-title">
+    <form class="modal__form" id="plan-form">
+      <h2 class="modal__title" id="modal-title">Plan Ekle</h2>
+      <div class="modal__field">
+        <label for="plan-time">Saat</label>
+        <input type="time" id="plan-time" name="time" required>
+      </div>
+      <div class="modal__field">
+        <label for="plan-subject">Konu</label>
+        <input type="text" id="plan-subject" name="subject" placeholder="Yazılım" autocomplete="off">
+      </div>
+      <div class="modal__field">
+        <label for="plan-task">Görev</label>
+        <input type="text" id="plan-task" name="task" placeholder="Functions" required autocomplete="off">
+      </div>
+      <div class="modal__field">
+        <label for="plan-note">Not</label>
+        <input type="text" id="plan-note" name="note" autocomplete="off">
+      </div>
+      <div class="modal__actions">
+        <button type="button" class="btn btn--ghost" id="modal-cancel">İptal</button>
+        <button type="submit" class="btn btn--primary">Kaydet</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
