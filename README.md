@@ -4,7 +4,7 @@ Kişisel haftalık plan, çalışma günlüğü ve zaman takip ajandası.
 
 ## Canlı
 
-GitHub Pages üzerinden yayınlanır.
+https://furkaneneskum.github.io/VELA/
 
 ## Yerel çalıştırma
 
