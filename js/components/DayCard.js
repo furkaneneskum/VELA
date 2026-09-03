@@ -1,6 +1,6 @@
 import { toDateKey, formatDayLabel, formatDayDate, isToday } from '../utils/date.js';
 import { formatDurationHuman } from '../utils/format.js';
-import { getDay, getDayTotalMs, togglePlan, setNotes } from '../utils/storage.js';
+import { getDay, getDayTotalMs, togglePlan, removePlan, setNotes } from '../utils/storage.js';
 
 export function renderDayCard(dayDate, { state, selectedKey, isMobileView, onAddPlan, onUpdate }) {
   const dateKey = toDateKey(dayDate);

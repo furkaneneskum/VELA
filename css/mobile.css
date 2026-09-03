@@ -179,9 +179,10 @@
     padding-block: var(--space-sm);
   }
 
-  .plan-item__check {
-    width: 1.25rem;
-    height: 1.25rem;
+  .plan-item__delete {
+    opacity: 1;
+    min-height: 2rem;
+    padding: var(--space-xs);
   }
 
   .day-notes__input {

@@ -155,6 +155,12 @@ export function togglePlan(state, dateKey, planId) {
   }
 }
 
+export function removePlan(state, dateKey, planId) {
+  const day = getDay(state, dateKey);
+  day.plans = day.plans.filter((p) => p.id !== planId);
+  saveState(state);
+}
+
 export function setNotes(state, dateKey, notes) {
   const day = getDay(state, dateKey);
   day.notes = notes;

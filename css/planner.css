@@ -226,6 +226,35 @@
   border-bottom: 1px solid rgba(38, 53, 43, 0.06);
 }
 
+.plan-item__aside {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.125rem;
+}
+
+.plan-item__delete {
+  padding: 0;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  opacity: 0;
+  transition: opacity var(--transition), color var(--transition);
+}
+
+.plan-item:hover .plan-item__delete,
+.plan-item:focus-within .plan-item__delete {
+  opacity: 1;
+}
+
+.plan-item__delete:hover {
+  color: var(--accent);
+}
+
 .plan-item:last-child {
   border-bottom: none;
 }
