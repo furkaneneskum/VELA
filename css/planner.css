@@ -101,8 +101,8 @@
 
 @media (min-width: 1200px) {
   .weekly-planner {
-    grid-template-columns: repeat(7, 1fr);
-    gap: var(--space-sm);
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-md);
   }
 }
 
@@ -157,6 +157,10 @@
 }
 
 @media (min-width: 1200px) {
+  .day-card {
+    min-height: 16rem;
+  }
+
   .day-card.is-hidden-mobile {
     display: flex;
   }
