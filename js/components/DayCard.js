@@ -36,7 +36,10 @@ export function renderDayCard(dayDate, { state, selectedKey, isMobileView, onAdd
               ${plan.subject ? `<div class="plan-item__subject">${plan.subject}</div>` : ''}
               <div class="plan-item__task">${plan.task}</div>
             </div>
-            <input type="checkbox" class="plan-item__check" ${plan.completed ? 'checked' : ''} aria-label="${plan.task}">
+            <div class="plan-item__aside">
+              <input type="checkbox" class="plan-item__check" ${plan.completed ? 'checked' : ''} aria-label="${plan.task}">
+              <button type="button" class="plan-item__delete" aria-label="Görevi sil">Sil</button>
+            </div>
           </li>
         `).join('')}
     </ul>
@@ -61,6 +64,15 @@ export function renderDayCard(dayDate, { state, selectedKey, isMobileView, onAdd
       const planId = item.dataset.planId;
       togglePlan(state, dateKey, planId);
       item.classList.toggle('is-done', e.target.checked);
+    });
+  });
+
+  card.querySelectorAll('.plan-item__delete').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const item = btn.closest('.plan-item');
+      removePlan(state, dateKey, item.dataset.planId);
+      onUpdate?.();
     });
   });
 
