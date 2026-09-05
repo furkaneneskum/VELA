@@ -45,7 +45,7 @@ export function renderDayCard(dayDate, { state, selectedKey, isMobileView, onAdd
     </ul>
     <div class="day-notes">
       <div class="day-notes__label">Notlar</div>
-      <textarea class="day-notes__input" rows="2" placeholder="Bugün aklında ne var?">${day.notes || ''}</textarea>
+      <textarea class="day-notes__input" rows="2" placeholder="Bugün aklımda ne var?">${day.notes || ''}</textarea>
     </div>
     <div class="day-study">
       Çalışma <span class="day-study__value">${totalMs > 0 ? formatDurationHuman(totalMs) : '—'}</span>

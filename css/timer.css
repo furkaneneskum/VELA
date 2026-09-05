@@ -58,7 +58,7 @@
 }
 
 .timer-subject__remove:hover {
-  color: var(--accent);
+  color: var(--color-khaki);
   border-color: var(--border-strong);
 }
 
@@ -125,7 +125,7 @@
 }
 
 .timer-subject-add__cancel:hover {
-  color: var(--accent);
+  color: var(--color-khaki);
 }
 
 .timer-subject {
@@ -160,7 +160,7 @@
 
 .timer-mode {
   flex: 1;
-  padding: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
   font-size: 0.625rem;
   font-weight: 500;
   letter-spacing: 0.06em;
@@ -168,17 +168,19 @@
   color: var(--text-muted);
   border: 1px solid transparent;
   border-radius: var(--radius-sm);
-  transition: color var(--transition), border-color var(--transition);
+  background: transparent;
+  transition: color var(--transition), border-color var(--transition), background var(--transition);
 }
 
 .timer-mode:hover {
   color: var(--text-secondary);
+  background: var(--bg-khaki-hover);
 }
 
 .timer-mode.is-active {
-  color: var(--color-dark);
+  color: var(--color-olive);
   border-color: var(--border);
-  background: var(--bg-primary);
+  background: var(--bg-tab-active);
 }
 
 .timer-display {
@@ -241,6 +243,17 @@
 
 .timer-controls .btn--primary.is-running {
   background: var(--color-olive);
+}
+
+.timer-save:not(:disabled) {
+  border-color: var(--color-khaki);
+  color: var(--color-dark);
+}
+
+.timer-save:not(:disabled):hover {
+  background: var(--bg-tab-active);
+  border-color: var(--color-olive);
+  color: var(--color-olive);
 }
 
 .timer-save {
@@ -314,8 +327,8 @@
 }
 
 .timer-today__delete:hover {
-  color: var(--accent);
-  background: rgba(165, 95, 82, 0.08);
+  color: var(--color-khaki);
+  background: var(--bg-khaki-hover);
 }
 
 .timer-today__total {

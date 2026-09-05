@@ -1,17 +1,29 @@
 :root {
+  /* Surfaces — cream first */
   --bg-primary: #F1EBDD;
   --bg-surface: #F8F4EA;
   --bg-secondary: #E9E0CF;
-  --bg-today: #F5F0E4;
-  --color-dark: #26352B;
-  --color-olive: #68705A;
-  --color-khaki: #A49A79;
-  --color-beige: #D8CDB8;
-  --border: rgba(38, 53, 43, 0.15);
-  --border-strong: rgba(38, 53, 43, 0.22);
-  --text-primary: #292B26;
-  --text-secondary: #6D6B5E;
-  --text-muted: #969080;
+  --bg-today: #F4F1E6;
+  --bg-tab-active: #E0E1D2;
+  --bg-khaki-hover: rgba(115, 121, 94, 0.08);
+
+  /* Olive / khaki accents */
+  --color-dark: #2F3D32;
+  --color-olive: #3F4A3B;
+  --color-khaki: #73795E;
+  --color-khaki-light: #A3A58A;
+  --color-soft-green: #879078;
+  --color-beige: #E9E0CF;
+
+  /* Borders */
+  --border: rgba(63, 74, 59, 0.18);
+  --border-strong: rgba(63, 74, 59, 0.30);
+
+  /* Typography */
+  --text-primary: #293029;
+  --text-secondary: #747568;
+  --text-muted: #8B8C78;
+  --text-notes: #3F3F36;
   --accent: #A55F52;
 
   --font-serif: "Newsreader", "Playfair Display", Georgia, serif;
@@ -29,4 +41,5 @@
 
   --transition: 180ms ease;
   --max-width: 90rem;
+  --focus-ring: rgba(115, 121, 94, 0.42);
 }

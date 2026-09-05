@@ -22,7 +22,7 @@
   font-size: clamp(0.9375rem, 2.5vw, 1.125rem);
   font-weight: 400;
   font-style: italic;
-  color: var(--text-secondary);
+  color: var(--color-khaki);
   margin-top: var(--space-xs);
   letter-spacing: 0.01em;
 }
@@ -72,7 +72,7 @@
 }
 
 .day-nav__btn.is-today:not(.is-active) {
-  color: var(--accent);
+  color: var(--color-khaki);
 }
 
 @media (min-width: 1200px) {
@@ -144,7 +144,7 @@
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--color-khaki);
   font-style: normal;
 }
 
@@ -204,7 +204,7 @@
 }
 
 .day-card__add:hover {
-  color: var(--accent);
+  color: var(--color-khaki);
 }
 
 /* Plans list */
@@ -248,7 +248,7 @@
 
 .plan-item__delete:hover {
   opacity: 1;
-  color: var(--accent);
+  color: var(--color-khaki);
 }
 
 .plan-item:last-child {
@@ -284,17 +284,20 @@
 .plan-item.is-done .plan-item__task {
   color: var(--text-muted);
   text-decoration: line-through;
-  text-decoration-color: var(--color-khaki);
+  text-decoration-color: var(--color-khaki-light);
   text-decoration-thickness: 1px;
-  opacity: 0.7;
+  opacity: 0.75;
+  transition: opacity var(--transition), color var(--transition);
 }
 
 .plan-item__check {
   width: 1rem;
   height: 1rem;
   margin-top: 0.125rem;
-  accent-color: var(--color-olive);
+  accent-color: var(--color-khaki);
   cursor: pointer;
+  border: 1px solid var(--color-olive);
+  border-radius: 2px;
 }
 
 .plan-list__empty {
@@ -318,7 +321,7 @@
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--color-khaki);
   margin-bottom: var(--space-xs);
 }
 
@@ -328,7 +331,7 @@
   padding: var(--space-xs) 0;
   font-family: var(--font-hand);
   font-size: 1rem;
-  color: var(--text-secondary);
+  color: var(--text-notes);
   background: transparent;
   border: none;
   resize: none;
@@ -336,8 +339,8 @@
 }
 
 .day-notes__input::placeholder {
-  color: var(--text-muted);
-  opacity: 0.5;
+  color: var(--color-khaki-light);
+  opacity: 0.55;
 }
 
 .day-notes__input:focus {
@@ -350,14 +353,15 @@
   padding-top: var(--space-sm);
   font-size: 0.625rem;
   letter-spacing: 0.06em;
-  color: var(--text-muted);
+  color: var(--color-khaki);
   position: relative;
   z-index: 1;
 }
 
 .day-study__value {
-  font-weight: 500;
-  color: var(--text-secondary);
+  font-weight: 600;
+  color: var(--color-olive);
+  font-variant-numeric: tabular-nums;
 }
 
 /* Weekly summary — bottom section */
@@ -434,11 +438,11 @@
 }
 
 .summary-bar.is-today .summary-bar__col {
-  background: var(--color-khaki);
+  background: var(--color-soft-green);
 }
 
 .summary-bar.is-today .summary-bar__label {
-  color: var(--accent);
+  color: var(--color-khaki);
 }
 
 .summary-bar__label {
@@ -473,7 +477,7 @@
 }
 
 .summary-row__day.is-today {
-  color: var(--accent);
+  color: var(--color-khaki);
 }
 
 .summary-row__time {
